@@ -8,15 +8,15 @@
 
       <form @submit.prevent="login" class="space-y-6">
         <div>
-          <label class="block text-sm font-medium mb-2">Email</label>
+          <label class="block text-sm text-gray-200 font-medium mb-2">Email</label>
           <input v-model="email" type="email" required
-            class="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500" 
+            class="w-full text-gray-200 px-4 py-3 border rounded-lg dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500" 
             placeholder="admin@yourstore.com" />
         </div>
         <div>
-          <label class="block text-sm font-medium mb-2">Password</label>
+          <label class="block text-sm text-gray-200 font-medium mb-2">Password</label>
           <input v-model="password" type="password" required
-            class="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500" />
+            class="w-full text-gray-200 px-4 py-3 border rounded-lg dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500" />
         </div>
 
         <button type="submit" :disabled="loading"
@@ -34,33 +34,37 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '../firebase/firebase'
+import { useAuthStore } from '../../stores/authStore'
 
-const email = ref('admin@yourstore.com')     // ← change or keep for testing
+const email = ref('admin@mystore.com')     // change for testing if needed
 const password = ref('123456')
 const loading = ref(false)
 const error = ref('')
 const router = useRouter()
-const auth = getAuth()
+const authStore = useAuthStore()
 
 const login = async () => {
   loading.value = true
   error.value = ''
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value)
-    const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid))
-    
-    if (userDoc.exists() && userDoc.data().isAdmin === true) {
-      localStorage.setItem('adminAuthenticated', 'true')
-      router.push('/')
-    } else {
-      auth.signOut()
-      error.value = 'Access denied. Admins only.'
-    }
+    await authStore.login(email.value, password.value)
+    // Successful admin login
+    router.push('/')
   } catch (err) {
-    error.value = 'Wrong email or password'
+    // Map Firebase errors to friendly messages where applicable
+    if (err && err.code) {
+      switch (err.code) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-email':
+          error.value = 'Wrong email or password'
+          break
+        default:
+          error.value = err.message || 'Login failed'
+      }
+    } else {
+      error.value = err.message || 'Login failed'
+    }
   } finally {
     loading.value = false
   }

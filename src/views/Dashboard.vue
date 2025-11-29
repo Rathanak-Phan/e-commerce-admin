@@ -1,168 +1,303 @@
 <template>
-  <div class="space-y-8">
-    <!-- Stats Cards (same as before) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <!-- Total Revenue -->
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border dark:border-gray-700">
+  <div class="space-y-8 pb-10">
+    <!-- ==================== STATS CARDS ==================== -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div
+        class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border dark:border-gray-700"
+      >
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Total Revenue</p>
-            <p class="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Total Revenue
+            </p>
+            <p class="text-3xl font-bold mt-2">
               ${{ stats.totalRevenue.toLocaleString() }}
             </p>
             <p class="text-sm text-green-600 mt-2">+12.5% from last month</p>
           </div>
-          <div class="bg-green-100 dark:bg-green-900/30 p-4 rounded-full">
+          <div class="p-4 bg-green-100 dark:bg-green-900/30 rounded-full">
             <ChartBarIcon class="w-8 h-8 text-green-600" />
           </div>
         </div>
       </div>
 
-      <!-- Total Orders -->
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border dark:border-gray-700">
+      <div
+        class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border dark:border-gray-700"
+      >
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-600 dark:text-gray-400">Total Orders</p>
-            <p class="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
-              {{ stats.totalOrders }}
-            </p>
+            <p class="text-3xl font-bold mt-2">{{ stats.totalOrders }}</p>
           </div>
-          <div class="bg-blue-100 dark:bg-blue-900/30 p-4 rounded-full">
+          <div class="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-full">
             <ShoppingCartIcon class="w-8 h-8 text-blue-600" />
           </div>
         </div>
       </div>
 
-      <!-- Total Products -->
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border dark:border-gray-700">
+      <div
+        class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border dark:border-gray-700"
+      >
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Total Products</p>
-            <p class="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
-              {{ stats.totalProducts }}
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Total Products
             </p>
+            <p class="text-3xl font-bold mt-2">{{ stats.totalProducts }}</p>
           </div>
-          <div class="bg-purple-100 dark:bg-purple-900/30 p-4 rounded-full">
+          <div class="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-full">
             <CubeIcon class="w-8 h-8 text-purple-600" />
           </div>
         </div>
       </div>
 
-      <!-- Active Users (now clickable!) -->
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border dark:border-gray-700 cursor-pointer hover:shadow-lg transition"
-           @click="activeTab = 'users'">
+      <div
+        class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border dark:border-gray-700"
+      >
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Active Customers</p>
-            <p class="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">
-              {{ stats.activeCustomers }}
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Active Customers
             </p>
-            <p class="text-sm text-indigo-600 mt-2">Click to view all users</p>
+            <p class="text-3xl font-bold mt-2">{{ stats.activeCustomers }}</p>
           </div>
-          <div class="bg-indigo-100 dark:bg-indigo-900/30 p-4 rounded-full">
+          <div class="p-4 bg-indigo-100 dark:bg-indigo-900/30 rounded-full">
             <UserGroupIcon class="w-8 h-8 text-indigo-600" />
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Tabs: Recent Orders | Sales Chart | Users List -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border dark:border-gray-700">
-      <!-- Tab Buttons -->
+    <!-- ==================== MAIN TABS ==================== -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border dark:border-gray-700 overflow-hidden"
+    >
       <div class="flex border-b dark:border-gray-700">
-        <button @click="activeTab = 'orders'"
-          class="px-6 py-4 font-medium text-sm border-b-2 transition"
-          :class="activeTab === 'orders' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
+        <button
+          @click="activeTab = 'orders'"
+          :class="tabClass('orders')"
+          class="transition-all"
+        >
           Recent Orders
         </button>
-        <button @click="activeTab = 'chart'"
-          class="px-6 py-4 font-medium text-sm border-b-2 transition"
-          :class="activeTab === 'chart' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
-          Sales Chart
+        <button
+          @click="activeTab = 'chart'"
+          :class="tabClass('chart')"
+          class="transition-all"
+        >
+          Sales Analytics
         </button>
-        <button @click="activeTab = 'users'"
-          class="px-6 py-4 font-medium text-sm border-b-2 transition"
-          :class="activeTab === 'users' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
-          All Customers ({{ userStore.users.length }})
+        <button
+          @click="activeTab = 'users'"
+          :class="tabClass('users')"
+          class="transition-all"
+        >
+          Customers
+          <span
+            class="ml-2 px-2 py-0.5 text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-full font-medium"
+          >
+            {{ userStore.users.length }}
+          </span>
         </button>
       </div>
 
-      <!-- Tab Content -->
       <div class="p-6">
-        <!-- Recent Orders -->
+        <!-- RECENT ORDERS -->
         <div v-if="activeTab === 'orders'">
           <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead class="text-xs uppercase text-gray-500 dark:text-gray-400">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                  <th class="px-6 py-3 text-left">Order</th>
-                  <th class="px-6 py-3 text-left">Customer</th>
-                  <th class="px-6 py-3 text-left">Total</th>
-                  <th class="px-6 py-3 text-left">Status</th>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    Order ID
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    Customer
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    Date
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    Total
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                <tr v-for="order in recentOrders" :key="order.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td class="px-6 py-4 text-sm">#{{ order.id.slice(0,8) }}</td>
-                  <td class="px-6 py-4 text-sm">{{ order.userEmail }}</td>
-                  <td class="px-6 py-4 text-sm font-medium">${{ order.total.toFixed(2) }}</td>
+                <tr
+                  v-for="order in recentOrders"
+                  :key="order.id"
+                  class="hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                >
+                  <td class="px-6 py-4 font-medium">
+                    #{{ order.id.slice(-8) }}
+                  </td>
+                  <td class="px-6 py-4">{{ order.userEmail || "Guest" }}</td>
+                  <td class="px-6 py-4">{{ formatDate(order.createdAt) }}</td>
+                  <td class="px-6 py-4 font-semibold">
+                    ${{ order.total?.toFixed(2) || "0.00" }}
+                  </td>
                   <td class="px-6 py-4">
-                    <span class="px-3 py-1 text-xs rounded-full font-medium"
-                      :class="{
-                        'bg-yellow-100 text-yellow-800': order.status === 'pending',
-                        'bg-blue-100 text-blue-800': order.status === 'processing',
-                        'bg-green-100 text-green-800': order.status === 'delivered'
-                      }">
-                      {{ order.status }}
+                    <span
+                      class="px-3 py-1 text-xs rounded-full font-medium"
+                      :class="statusColor(order.status)"
+                    >
+                      {{ order.status || "pending" }}
                     </span>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <p
+              v-if="recentOrders.length === 0"
+              class="text-center py-12 text-gray-500"
+            >
+              No orders yet.
+            </p>
           </div>
         </div>
 
-        <!-- Sales Chart -->
-        <div v-if="activeTab === 'chart'">
-          <canvas ref="salesChart" class="w-full h-80"></canvas>
+        <!-- SALES ANALYTICS - UPGRADED CHART -->
+        <div v-if="activeTab === 'chart'" class="h-96 -mx-6 -mb-6">
+          <canvas ref="chartCanvas"></canvas>
         </div>
 
-        <!-- Users List -->
+        <!-- CUSTOMERS LIST - FULLY EDITABLE -->
         <div v-if="activeTab === 'users'">
-          <div class="flex justify-between items-center mb-4">
-            <input v-model="userSearch" placeholder="Search users..." class="px-4 py-2 border rounded-lg dark:bg-gray-700" />
+          <div class="mb-6 flex justify-end">
+            <input
+              v-model="searchQuery"
+              placeholder="Search by name or email..."
+              class="px-4 py-2 border rounded-lg dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none transition"
+            />
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div v-for="user in filteredUsers" :key="user.uid"
-              class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 hover:shadow-md transition">
-              <div class="flex items-center gap-4 mb-4">
-                <div class="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                  {{ user.email[0].toUpperCase() }}
-                </div>
-                <div>
-                  <p class="font-semibold">{{ user.email }}</p>
-                  <p class="text-sm text-gray-500">ID: {{ user.uid.slice(0,10) }}...</p>
-                </div>
-              </div>
-
-              <div class="space-y-2 text-sm">
-                <p>Total Orders: <strong>{{ user.totalOrders || 0 }}</strong></p>
-                <p>Total Spent: <strong>${{ (user.totalSpent || 0).toFixed(2) }}</strong></p>
-                <p>Last Login: <strong>{{ formatDate(user.lastLogin) }}</strong></p>
-              </div>
-
-              <div class="mt-4 flex gap-2">
-                <button @click="blockUser(user)" 
-                  class="flex-1 px-3 py-2 text-sm rounded-lg transition"
-                  :class="user.disabled ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'">
-                  {{ user.disabled ? 'Unblock' : 'Block' }}
-                </button>
-                <button class="flex-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-lg">
-                  View Profile
-                </button>
-              </div>
-            </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    User
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    Email
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    Role
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left font-medium text-gray-500 uppercase"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                <tr
+                  v-for="user in filteredUsers"
+                  :key="user.uid"
+                  class="hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                >
+                  <td class="px-6 py-4">
+                    <div
+                      v-if="editingId === user.uid"
+                      class="flex items-center gap-3"
+                    >
+                      <input
+                        v-model="editName"
+                        @keyup.enter="saveName(user)"
+                        @blur="cancelEdit"
+                        class="px-3 py-2 border rounded-lg dark:bg-gray-600 focus:ring-2 focus:ring-indigo-500 outline-none w-40"
+                        ref="editInput"
+                      />
+                      <button
+                        @click="saveName(user)"
+                        class="text-green-600 text-sm font-medium"
+                      >
+                        Save
+                      </button>
+                    </div>
+                    <div v-else class="flex items-center gap-3">
+                      <div
+                        class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-lg shadow-md"
+                      >
+                        {{
+                          (user.name || user.email[0]).charAt(0).toUpperCase()
+                        }}
+                      </div>
+                      <span class="font-medium">{{
+                        user.name || user.email.split("@")[0]
+                      }}</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                    {{ user.email }}
+                  </td>
+                  <td class="px-6 py-4">
+                    <span
+                      class="px-3 py-1 text-xs rounded-full font-medium"
+                      :class="
+                        user.isAdmin
+                          ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30'
+                          : 'bg-gray-100 text-gray-700 dark:bg-gray-600'
+                      "
+                    >
+                      {{ user.isAdmin ? "Admin" : "Customer" }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span
+                      class="px-3 py-1 text-xs rounded-full font-medium"
+                      :class="
+                        user.disabled
+                          ? 'bg-red-100 text-red-800 dark:bg-red-900/30'
+                          : 'bg-green-100 text-green-800 dark:bg-green-900/30'
+                      "
+                    >
+                      {{ user.disabled ? "Blocked" : "Active" }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 space-x-3">
+                    <button
+                      @click="startEdit(user)"
+                      class="text-indigo-600 hover:underline text-sm font-medium"
+                    >
+                      Edit Name
+                    </button>
+                    <button
+                      @click="toggleBlock(user)"
+                      :class="user.disabled ? 'text-green-600' : 'text-red-600'"
+                      class="hover:underline text-sm font-medium"
+                    >
+                      {{ user.disabled ? "Unblock" : "Block" }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -171,72 +306,184 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { useProductStore } from '../stores/productStore'
-import { useOrderStore } from '../stores/orderStore'
-import { useUserStore } from '../stores/userStore'  // ← NEW: User Store
-import Chart from 'chart.js/auto'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
+import Chart from "chart.js/auto";
+import { useOrderStore } from "../stores/orderStore";
+import { useProductStore } from "../stores/productStore";
+import { useUserStore } from "../stores/userStore";
 import {
-  ChartBarIcon, ShoppingCartIcon, CubeIcon, UserGroupIcon
-} from '@heroicons/vue/24/solid'
+  ChartBarIcon,
+  ShoppingCartIcon,
+  CubeIcon,
+  UserGroupIcon,
+} from "@heroicons/vue/24/solid";
 
-const productStore = useProductStore()
-const orderStore = useOrderStore()
-const userStore = useUserStore()
+// Stores
+const orderStore = useOrderStore();
+const productStore = useProductStore();
+const userStore = useUserStore();
 
-const salesChart = ref(null)
-let chartInstance = null
-const activeTab = ref('orders')
-const userSearch = ref('')
+// State
+const chartCanvas = ref(null);
+const activeTab = ref("orders");
+const searchQuery = ref("");
+const editingId = ref(null);
+const editName = ref("");
+const editInput = ref(null);
+let chart = null;
 
 // Stats
 const stats = computed(() => {
   const deliveredRevenue = orderStore.orders
-    .filter(o => o.status === 'delivered')
-    .reduce((sum, o) => sum + (o.total || 0), 0)
-
-  const lowStock = productStore.products.filter(p => (p.stock || 0) < 10).length
+    .filter((o) => o.status === "delivered")
+    .reduce((sum, o) => sum + (o.total || 0), 0);
 
   return {
     totalRevenue: Math.round(deliveredRevenue),
     totalOrders: orderStore.orders.length,
     totalProducts: productStore.products.length,
-    activeCustomers: userStore.users.length,
-    lowStock
-  }
-})
+    activeCustomers: userStore.users.filter((u) => !u.disabled).length,
+  };
+});
 
-const recentOrders = computed(() => orderStore.orders.slice(0, 5))
+const recentOrders = computed(() =>
+  [...orderStore.orders]
+    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
+    .slice(0, 8)
+);
+
 const filteredUsers = computed(() => {
-  return userStore.users.filter(u =>
-    u.email.toLowerCase().includes(userSearch.value.toLowerCase())
-  )
-})
+  const q = searchQuery.value.toLowerCase();
+  return userStore.users.filter(
+    (u) =>
+      u.email.toLowerCase().includes(q) ||
+      (u.name || "").toLowerCase().includes(q)
+  );
+});
 
-const formatDate = (timestamp) => {
-  if (!timestamp) return 'Never'
-  const d = timestamp.toDate ? timestamp.toDate() : new Date(timestamp)
-  return d.toLocaleDateString()
-}
+// Helpers
+const formatDate = (ts) => {
+  if (!ts) return "—";
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
-const blockUser = async (user) => {
-  await userStore.blockUser(user.uid, !user.disabled)
-}
+const statusColor = (status) => {
+  const map = {
+    pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30",
+    processing: "bg-blue-100 text-blue-800 dark:bg-blue-900/30",
+    shipped: "bg-purple-100 text-purple-800 dark:bg-purple-900/30",
+    delivered: "bg-green-100 text-green-800 dark:bg-green-900/30",
+  };
+  return map[status] || "bg-gray-100 text-gray-700 dark:bg-gray-600";
+};
 
+const tabClass = (tab) =>
+  activeTab.value === tab
+    ? "px-8 py-4 font-semibold text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50/50 dark:bg-indigo-900/20"
+    : "px-8 py-4 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700";
+
+// User Actions
+const startEdit = (user) => {
+  editingId.value = user.uid;
+  editName.value = user.name || "";
+  nextTick(() => editInput.value?.focus());
+};
+
+const saveName = async (user) => {
+  const newName = editName.value.trim();
+  if (newName && newName !== user.name) {
+    await userStore.updateUser(user.uid, { name: newName });
+  }
+  editingId.value = null;
+};
+
+const cancelEdit = () => {
+  editingId.value = null;
+};
+
+const toggleBlock = async (user) => {
+  await userStore.blockUser(user.uid, !user.disabled);
+};
+
+// Chart - UPGRADED
 onMounted(async () => {
   await Promise.all([
-    productStore.fetchProducts(),
     orderStore.fetchOrders(),
-    userStore.fetchUsers()  // ← Fetch all users
-  ])
+    productStore.fetchProducts(),
+    userStore.fetchUsers(),
+  ]);
 
-  // Chart setup...
-  if (salesChart.value && activeTab.value === 'chart') {
-    // same chart code as before
-  }
-})
+  if (chartCanvas.value) createChart();
+});
 
-onBeforeUnmount(() => {
-  chartInstance?.destroy()
-})
+const createChart = () => {
+  const ctx = chartCanvas.value.getContext("2d");
+  const monthly = Array(12).fill(0);
+
+  orderStore.orders.forEach((order) => {
+    if (order.status === "delivered" && order.createdAt) {
+      const month = order.createdAt.toDate().getMonth();
+      monthly[month] += order.total || 0;
+    }
+  });
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+      datasets: [
+        {
+          label: "Revenue",
+          data: monthly,
+          borderColor: "rgb(99, 102, 241)",
+          backgroundColor: "rgba(99, 102, 241, 0.1)",
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: "#6366f1",
+          pointRadius: 5,
+          pointHoverRadius: 8,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: (ctx) => "$" + ctx.parsed.y.toLocaleString() },
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: "rgba(0,0,0,0.05)" },
+          ticks: { callback: (v) => "$" + v.toLocaleString() },
+        },
+        x: { grid: { display: false } },
+      },
+    },
+  });
+};
+
+onBeforeUnmount(() => chart?.destroy());
 </script>

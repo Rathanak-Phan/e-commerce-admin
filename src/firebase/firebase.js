@@ -1,5 +1,4 @@
-// src/firebase.js   ← put it here (or src/firebase/firebase.js)
-
+// src/firebase/firebase.js
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
@@ -16,6 +15,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 
-// Export what your stores need
+// Export everything your app needs
 export const db = getFirestore(app)
 export const auth = getAuth(app)
