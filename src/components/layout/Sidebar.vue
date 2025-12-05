@@ -7,9 +7,9 @@
     ]"
   >
     <!-- Logo -->
-    <div class="p-6 border-b dark:border-gray-700">
-      <h1 class="text-2xl font-bold text-indigo-600">EcomAdmin</h1>
-    </div>
+    <router-link to="/" class="p-6 border-b dark:border-gray-700">
+      <h1 class="text-2xl font-bold text-indigo-600 text-center">Admin</h1>
+    </router-link>
 
     <!-- Navigation Links -->
     <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">

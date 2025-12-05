@@ -41,5 +41,14 @@ authStore.initAuth()   // ← Correct name!
 // Router
 app.use(router)
 
+router.afterEach((to) => {
+  if (to.meta && to.meta.title) {
+    document.title = to.meta.title;
+  } else {
+    document.title = "rathanak-phan-admin";
+  }
+});
+
+
 // Mount app
 app.mount('#app')

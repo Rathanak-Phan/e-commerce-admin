@@ -3,43 +3,63 @@ import { createRouter, createWebHistory } from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
+import { Title } from "chart.js";
 
 const routes = [
   {
     path: "/login",
     name: "Login",
     component: () => import("../views/auth/Login.vue"),
+    meta: {
+      title: "login | rathanak-phan-admin"
+    }
   },
+
   {
     path: "/",
     name: "Dashboard",
     component: () => import("../views/Dashboard.vue"),
-    meta: { requiresAdmin: true },
+    meta: {
+      title: "Dashboard | rathanak-phan-admin",
+      requiresAdmin: true
+    }
   },
+
   {
     path: "/products",
     name: "Products",
     component: () => import("../views/Products.vue"),
-    meta: { requiresAdmin: true },
+    meta: {
+      title: "Products | rathanak-phan-admin",
+      requiresAdmin: true
+    }
   },
+
   {
     path: "/orders",
     name: "Orders",
     component: () => import("../views/Orders.vue"),
-    meta: { requiresAdmin: true },
-  },
-  // Add more admin routes here...
-  {
-    path: "/:catchAll(.*)",
-    redirect: "/",
+    meta: {
+      title: "Orders | rathanak-phan-admin",
+      requiresAdmin: true
+    }
   },
 
   {
     path: "/profile",
     name: "Profile",
     component: () => import("../views/Profile.vue"),
-    meta: { requiresAuth: true },
+    meta: {
+      title: "Profile | rathanak-phan-admin",
+      requiresAuth: true
+    }
   },
+
+  // fallback
+  {
+    path: "/:catchAll(.*)",
+    redirect: "/"
+  }
 ];
 
 const router = createRouter({
